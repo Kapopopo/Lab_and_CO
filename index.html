@@ -1,978 +1,557 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TRAKR — Lunettes connectées de randonnée</title>
-  <style>
-    :root {
-      --primary: #8bcdf2;
-      --muted: #d3d3d3;
-      --ink: #0f172a;
-      --bg: #0b1020;
-      --card: #0f152c;
-      --accent: #4aa7da;
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --glass: rgba(255, 255, 255, 0.06);
-      --shadow: 0 10px 30px rgba(0, 0, 0, .35);
-      --radius-xl: 24px;
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --radius-sm: 10px;
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    html,
-    body {
-      height: 100%
-    }
-
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-      color: #e8f1ff;
-      background: radial-gradient(1200px 1200px at 10% 10%, rgba(139, 205, 242, .15), transparent 60%), radial-gradient(900px 900px at 90% 20%, rgba(211, 211, 211, .12), transparent 60%), radial-gradient(1000px 1000px at 70% 90%, rgba(139, 205, 242, .09), transparent 60%), var(--bg);
-      overflow-x: hidden;
-    }
-
-    .blob {
-      position: fixed;
-      filter: blur(60px);
-      opacity: .25;
-      z-index: 0;
-      animation: blobFloat 20s ease-in-out infinite;
-    }
-
-    .blob.b1 {
-      background: var(--primary);
-      width: 380px;
-      height: 380px;
-      top: -120px;
-      left: -80px;
-      border-radius: 50%
-    }
-
-    .blob.b2 {
-      background: var(--muted);
-      width: 320px;
-      height: 320px;
-      bottom: -140px;
-      right: -60px;
-      border-radius: 50%;
-      animation-duration: 26s
-    }
-
-    .blob.b3 {
-      background: var(--accent);
-      width: 260px;
-      height: 260px;
-      top: 40%;
-      left: -100px;
-      border-radius: 50%;
-      animation-duration: 23s
-    }
-
-    @keyframes blobFloat {
-
-      0%,
-      100% {
-        transform: translate(0, 0)
-      }
-
-      50% {
-        transform: translate(40px, -30px)
-      }
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(8px);
-      background: linear-gradient(180deg, rgba(11, 16, 32, .75), rgba(11, 16, 32, .35) 60%, transparent);
-      border-bottom: 1px solid rgba(255, 255, 255, .06)
-    }
-
-    .nav {
-      max-width: 1200px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 22px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: var(--primary)
-    }
-
-    .logo {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--muted));
-      display: grid;
-      place-items: center;
-      box-shadow: var(--shadow)
-    }
-
-    .logo svg {
-      width: 28px;
-      height: 28px;
-      fill: #0a0f1f;
-      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .25))
-    }
-
-    .wordmark {
-      font-weight: 800;
-      letter-spacing: .12em;
-      font-size: 20px
-    }
-
-    .navlinks {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap
-    }
-
-    .chip {
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, .08);
-      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03));
-      color: #e9f6ff;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      transition: .25s transform, .25s border, .25s background;
-    }
-
-    .chip:hover {
-      transform: translateY(-2px);
-      border-color: var(--primary);
-      background: linear-gradient(180deg, rgba(139, 205, 242, .25), rgba(255, 255, 255, .04))
-    }
-
-    .hero {
-      max-width: 1200px;
-      margin: 32px auto;
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 22px;
-      align-items: stretch;
-      position: relative;
-      z-index: 1
-    }
-
-    .panel {
-      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
-      border: 1px solid rgba(255, 255, 255, .08);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* Animated header ribbon */
-    .ribbon {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: conic-gradient(from 180deg, transparent 0 30%, rgba(139, 205, 242, .25) 30% 60%, transparent 60% 100%);
-      mask: linear-gradient(transparent, white 15% 85%, transparent);
-      animation: ribbonSpin 12s linear infinite;
-    }
-
-    @keyframes ribbonSpin {
-      to {
-        transform: rotate(360deg)
-      }
-    }
-
-    .hero-left {
-      padding: 26px 28px 30px
-    }
-
-    .kicker {
-      display: inline-flex;
-      gap: 10px;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, .1);
-      background: rgba(139, 205, 242, .1);
-      color: #cfefff;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 12px;
-      letter-spacing: .1em
-    }
-
-    .kicker .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 0 0 rgba(34, 197, 94, .6);
-      animation: pulse 2s infinite
-    }
-
-    @keyframes pulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, .6)
-      }
-
-      70% {
-        box-shadow: 0 0 0 16px rgba(34, 197, 94, 0)
-      }
-
-      100% {
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0)
-      }
-    }
-
-    h1 {
-      margin: 14px 0 8px;
-      font-size: 44px;
-      line-height: 1.1
-    }
-
-    .sub {
-      opacity: .85;
-      margin-bottom: 18px
-    }
-
-    .cta-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin: 18px 0 6px
-    }
-
-    .btn {
-      padding: 12px 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, .12);
-      background: linear-gradient(180deg, rgba(139, 205, 242, .35), rgba(139, 205, 242, .12));
-      color: #0a0f1f;
-      font-weight: 800;
-      text-decoration: none;
-      transition: .2s transform, .2s box-shadow;
-      box-shadow: 0 6px 18px rgba(139, 205, 242, .25);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 22px rgba(139, 205, 242, .35)
-    }
-
-    .btn.ghost {
-      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03));
-      color: #e9f6ff
-    }
-
-    .micro {
-      font-size: 12px;
-      opacity: .75
-    }
-
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 18px
-    }
-
-    .metric {
-      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
-      border: 1px solid rgba(255, 255, 255, .08);
-      border-radius: 16px;
-      padding: 12px;
-      text-align: center
-    }
-
-    .metric .val {
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--primary)
-    }
-
-    .metric .lab {
-      font-size: 12px;
-      opacity: .8
-    }
-
-    /* Right hero: device pairing & compass */
-    .hero-right {
-      display: grid;
-      grid-template-rows: 1fr auto;
-    }
-
-    .pair {
-      padding: 20px 20px 16px
-    }
-
-    .pair h3 {
-      margin: 0 0 10px
-    }
-
-    .pair .status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700
-    }
-
-    .badge {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(139, 205, 242, .15);
-      border: 1px solid rgba(139, 205, 242, .4);
-      color: #bfe7ff
-    }
-
-    .status .led {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 12px var(--success)
-    }
-
-    .pair .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 12px
-    }
-
-    .tile {
-      border: 1px solid rgba(255, 255, 255, .08);
-      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
-      border-radius: 14px;
-      padding: 12px
-    }
-
-    .tile h4 {
-      margin: 0 0 8px;
-      font-size: 14px
-    }
-
-    .compass {
-      display: grid;
-      place-items: center;
-      padding: 18px
-    }
-
-    .dial {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, .15);
-      position: relative;
-      background: radial-gradient(circle at 50% 55%, rgba(139, 205, 242, .25), transparent 50%), linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
-      box-shadow: inset 0 0 40px rgba(139, 205, 242, .15);
-    }
-
-    .needle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 2px;
-      height: 70px;
-      background: var(--danger);
-      transform-origin: center 80%;
-      transform: translate(-50%, -80%) rotate(0deg);
-      border-radius: 999px;
-      box-shadow: 0 0 10px rgba(239, 68, 68, .6)
-    }
-
-    .tick {
-      position: absolute;
-      width: 2px;
-      height: 10px;
-      background: rgba(255, 255, 255, .15);
-      top: 6px;
-      left: 50%;
-      transform-origin: center 74px
-    }
-
-    .dial .center {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--muted);
-      box-shadow: 0 0 12px rgba(211, 211, 211, .6)
-    }
-
-    /* Main grid */
-    .grid {
-      max-width: 1200px;
-      margin: 12px auto 60px;
-      padding: 0 24px;
-      display: grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: 20px;
-      position: relative;
-      z-index: 1
-    }
-
-    .map {
-      height: 420px;
-      position: relative
-    }
-
-    .map canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: var(--radius-xl)
-    }
-
-    .hud {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .control-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px
-    }
-
-    .switch {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, .08);
-      border-radius: 14px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02))
-    }
-
-    .switch label {
-      opacity: .85;
-      font-weight: 700
-    }
-
-    .toggle {
-      --w: 48px;
-      --h: 26px;
-      width: var(--w);
-      height: var(--h);
-      border-radius: 999px;
-      position: relative;
-      background: rgba(255, 255, 255, .15);
-      box-shadow: inset 0 6px 16px rgba(0, 0, 0, .25);
-      cursor: pointer;
-      transition: .25s
-    }
-
-    .toggle::after {
-      content: "";
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: white;
-      box-shadow: var(--shadow);
-      transition: .25s
-    }
-
-    .toggle.active {
-      background: linear-gradient(90deg, var(--muted), var(--primary))
-    }
-
-    .toggle.active::after {
-      left: calc(var(--w) - 23px)
-    }
-
-    .progress {
-      height: 12px;
-      background: rgba(255, 255, 255, .08);
-      border-radius: 999px;
-      overflow: hidden
-    }
-
-    .bar {
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      box-shadow: 0 0 18px rgba(139, 205, 242, .55) inset;
-      transition: width 1s ease
-    }
-
-    .card {
-      padding: 16px;
-      border: 1px solid rgba(255, 255, 255, .08);
-      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
-      border-radius: var(--radius-lg)
-    }
-
-    .list {
-      display: grid;
-      gap: 10px;
-      margin-top: 10px
-    }
-
-    .row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      justify-content: space-between;
-      padding: 10px 12px;
-      border: 1px dashed rgba(255, 255, 255, .12);
-      border-radius: 12px
-    }
-
-    .sos {
-      display: flex;
-      align-items: center;
-      gap: 10px
-    }
-
-    .sos .pulse {
-      width: 14px;
-      height: 14px;
-      background: var(--danger);
-      border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(239, 68, 68, .7);
-      animation: pulse 1.6s infinite
-    }
-
-    .eq {
-      display: flex;
-      align-items: end;
-      gap: 4px;
-      height: 18px
-    }
-
-    .eq i {
-      width: 3px;
-      background: var(--primary);
-      border-radius: 2px;
-      animation: eq 1.2s infinite ease-in-out;
-      opacity: .85
-    }
-
-    .eq i:nth-child(2) {
-      animation-delay: .1s
-    }
-
-    .eq i:nth-child(3) {
-      animation-delay: .2s
-    }
-
-    .eq i:nth-child(4) {
-      animation-delay: .3s
-    }
-
-    .eq i:nth-child(5) {
-      animation-delay: .4s
-    }
-
-    @keyframes eq {
-
-      0%,
-      100% {
-        height: 3px
-      }
-
-      50% {
-        height: 18px
-      }
-    }
-
-    .footer {
-      max-width: 1200px;
-      margin: 40px auto 80px;
-      opacity: .75;
-      text-align: center;
-      padding: 0 22px
-    }
-
-    /* Tooltips */
-    [data-tip] {
-      position: relative
-    }
-
-    [data-tip]:hover::after {
-      content: attr(data-tip);
-      position: absolute;
-      bottom: 120%;
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-      background: #0a0f1f;
-      color: #dff3ff;
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, .12);
-      box-shadow: var(--shadow);
-      font-size: 12px
-    }
-
-    /* Mobile */
-    @media (max-width: 980px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-
-      .grid {
-        grid-template-columns: 1fr
-      }
-
-      .metrics {
-        grid-template-columns: repeat(2, 1fr)
-      }
-
-      .hud {
-        grid-template-columns: 1fr 1fr
-      }
-
-      .control-group {
-        grid-template-columns: 1fr
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lunettes de sport — SEMAINE INNOVATION</title>
+<meta name="description" content="Lunettes de sport connectées: HUD D+, GPS, parcours type Strava, cardio, hydratation, météo, SOS. Performance & sécurité.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
 
-  <header>
-    <nav class="nav">
-      <a class="brand" href="#">
-        <span class="logo" aria-hidden>
-          <svg viewBox="0 0 24 24" aria-hidden>
-            <path
-              d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm0 3a7 7 0 1 1-7 7 7.008 7.008 0 0 1 7-7Zm-3.5 7a3.5 3.5 0 1 0 3.5-3.5A3.5 3.5 0 0 0 8.5 12Z" />
-          </svg>
-        </span>
-        <span class="wordmark">TRAKR</span>
-      </a>
-      <div class="navlinks">
-        <a class="chip" href="#map">Carte</a>
-        <a class="chip" href="#hud">HUD</a>
-        <a class="chip" href="#controls">Contrôles</a>
-        <a class="chip" href="#challenges">Défis</a>
-        <a class="chip" href="#settings">Paramètres</a>
-      </div>
-    </nav>
-  </header>
+<nav>
+  <div class="inner">
+    <a href="#" class="logo">
+      <span class="mark"></span>
+      TraKR
+    </a>
+    <ul>
+      <li><a href="#concept">Concept</a></li>
+      <li><a href="#gamme">Gamme</a></li>
+      <li><a href="#influence">Ambassadeur</a></li>
+      <li><a href="#cta">Contact</a></li>
+    </ul>
+  </div>
+</nav>
 
-  <section class="hero">
-    <div class="panel hero-left">
-      <div class="ribbon"></div>
-      <span class="kicker"><span class="dot"></span> Connecté aux lunettes</span>
-      <h1>Randonnée augmentée, <span style="color:var(--primary)">guidage</span> de précision.</h1>
-      <p class="sub">TRAKR synchronise vos <strong>lunettes connectées</strong> pour afficher en sur‑impression: cap,
-        altitude, météo, rythme cardiaque, points d'intérêt et itinéraires hors‑ligne. Le tout avec des
-        <strong>animations fluides</strong> et une interface claire.
-      </p>
-      <div class="cta-row">
-        <a class="btn" href="#map">Démarrer une sortie</a>
-        <a class="btn ghost" href="#controls">Mode hors‑ligne</a>
+<section class="hero">
+  <div class="hero-carousel">
+    <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1549576490-b0b4831ef60a?q=80&w=2400')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1452573992436-6d508f200b30?q=80&w=2400')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2400')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2400')"></div>
+  </div>
+
+  <div class="hero-content">
+    <span class="hero-badge">🚀 SEMAINE INNOVATION</span>
+    <h1>Voyez plus loin</h1>
+    <p>Lunettes de sport connectées : HUD D+ intégré, GPS live, parcours type Strava, cardio, hydratation, météo, SOS. Performance, nature et sécurité en un regard.</p>
+    <div class="hero-cta">
+      <a href="#gamme" class="btn">Découvrir la gamme</a>
+      <a href="#concept" class="btn btn-outline">En savoir plus</a>
+    </div>
+  </div>
+
+  <div class="carousel-dots">
+    <span class="carousel-dot active" onclick="goToSlide(0)"></span>
+    <span class="carousel-dot" onclick="goToSlide(1)"></span>
+    <span class="carousel-dot" onclick="goToSlide(2)"></span>
+    <span class="carousel-dot" onclick="goToSlide(3)"></span>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-content">
+    <span>✓ HUD Display+ intégré</span>
+    <span>✓ GPS & Parcours Strava</span>
+    <span>✓ Cardio optique</span>
+    <span>✓ Météo live</span>
+    <span>✓ SOS intégré</span>
+    <span>✓ Détection obstacles IA</span>
+    <span>✓ HUD Display+ intégré</span>
+    <span>✓ GPS & Parcours Strava</span>
+    <span>✓ Cardio optique</span>
+    <span>✓ Météo live</span>
+  </div>
+</div>
+
+<section id="concept">
+  <div class="section-inner">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1452573992436-6d508f200b30?q=80&w=1600" alt="Trail nature">
+    </div>
+    <div class="section-text">
+      <h2>Un regard suffit</h2>
+      <p>Conçues pour les sportifs exigeants, nos lunettes intègrent un affichage tête haute (HUD) discret : vitesse, distance, dénivelé, cardio, météo, hydratation. Guidage GPS type Strava pour suivre vos parcours.</p>
+      <p>Monture ultra-légère en carbone (28g), résistante (IP68), avec capteurs cardio optique et détection d'obstacles par IA. Finition mate, verres polarisés interchangeables.</p>
+      <a href="#gamme" class="btn">Explorer la gamme</a>
+    </div>
+  </div>
+</section>
+
+<section id="gamme" style="background:rgba(255,255,255,.3);backdrop-filter:blur(12px)">
+  <div style="max-width:1400px;margin:0 auto;padding:0 20px;text-align:center;margin-bottom:50px">
+    <h2>Notre gamme</h2>
+    <p style="max-width:700px;margin:20px auto 0">Trois modèles pensés pour trois pratiques : randonnée, trail et triathlon. Choisissez celui qui correspond à votre terrain.</p>
+  </div>
+
+  <div class="products-grid">
+    
+    <div class="product-card" onclick="openModal('rando')">
+      <div class="product-img">
+        <img src="https://suaps.univ-grenoble-alpes.fr/medias/photo/rando-groupe-1460x973_1688731686726-jpg" alt="RANDO">
+        <span class="product-badge">Essentiel</span>
       </div>
-      <div class="metrics" aria-label="KPIs">
-        <div class="metric">
-          <div class="val" id="km">0.0 km</div>
-          <div class="lab">Distance</div>
-        </div>
-        <div class="metric">
-          <div class="val" id="elev">0 m</div>
-          <div class="lab">Dénivelé +</div>
-        </div>
-        <div class="metric">
-          <div class="val" id="pace">0:00</div>
-          <div class="lab">Allure</div>
-        </div>
-        <div class="metric">
-          <div class="val" id="hr">-- bpm</div>
-          <div class="lab">Fréquence cardiaque</div>
-        </div>
+      <div class="product-body">
+        <h3>RANDO</h3>
+        <p>Guidage doux, météo & hydratation, SOS discret. Pensé pour la montagne, la sécurité et l'autonomie.</p>
+        <div class="product-price">349 €</div>
+        <button class="btn" style="width:100%" onclick="event.stopPropagation();openModal('rando')">Voir la fiche technique</button>
       </div>
     </div>
 
-    <div class="panel hero-right">
-      <div class="pair">
-        <h3>Appairage</h3>
-        <div class="status"><span class="led"></span> TRAKR Glass v1 · <span class="badge">connecté</span></div>
-        <div class="grid" style="margin-top:10px">
-          <div class="tile" data-tip="État batterie lunettes">
-            <h4>Batterie lunettes</h4>
-            <div class="progress">
-              <div class="bar" id="batGlass"></div>
-            </div>
-          </div>
-          <div class="tile" data-tip="État batterie téléphone">
-            <h4>Batterie téléphone</h4>
-            <div class="progress">
-              <div class="bar" id="batPhone"></div>
-            </div>
-          </div>
-          <div class="tile" data-tip="Qualité GPS">
-            <h4>Signal GPS</h4>
-            <div class="progress">
-              <div class="bar" id="gps"></div>
-            </div>
-          </div>
-          <div class="tile" data-tip="Qualité BLE">
-            <h4>Bluetooth</h4>
-            <div class="progress">
-              <div class="bar" id="ble"></div>
-            </div>
-          </div>
-        </div>
+    <div class="product-card" onclick="openModal('trail')">
+      <div class="product-img">
+        <img src="https://www.lequipe.fr/_medias/img-photo-jpg/running-trail/1500000000883313/13:9,700:467-828-552-75/ceac0.jpg" alt="TRAIL">
+        <span class="product-badge" style="background:var(--c1);color:var(--white);border:none">Le plus choisi</span>
       </div>
-      <div class="compass">
-        <div class="dial" aria-label="Boussole">
-          <!-- ticks -->
-          <span class="tick" style="transform:translateX(-1px) rotate(0deg)"></span>
-          <span class="tick" style="transform:translateX(-1px) rotate(90deg)"></span>
-          <span class="tick" style="transform:translateX(-1px) rotate(180deg)"></span>
-          <span class="tick" style="transform:translateX(-1px) rotate(270deg)"></span>
-          <div class="needle" id="needle"></div>
-          <div class="center"></div>
+      <div class="product-body">
+        <h3>TRAIL</h3>
+        <p>Affichage D+/km, dénivelé live, détection obstacles IA, navigation Strava. Best-seller conçu pour l'exigence.</p>
+        <div class="product-price">499 €</div>
+        <button class="btn" style="width:100%" onclick="event.stopPropagation();openModal('trail')">Voir la fiche technique</button>
+      </div>
+    </div>
+
+    <div class="product-card" onclick="openModal('triathlon')">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1600" alt="TRIATHLON">
+        <span class="product-badge">Premium</span>
+      </div>
+      <div class="product-body">
+        <h3>TRIATHLON</h3>
+        <p>KM/H, cadence, cardio, parcours prédéfinis. Optimisé pour les enchaînements natation/vélo/course. IP68.</p>
+        <div class="product-price">649 €</div>
+        <button class="btn" style="width:100%" onclick="event.stopPropagation();openModal('triathlon')">Voir la fiche technique</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="influence">
+  <div class="section-inner">
+    <div class="section-img">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1600" alt="Crêtes montagne">
+    </div>
+    <div class="section-text">
+      <h2>"Voir plus loin"</h2>
+      <p>Collaboration "test terrain" avec François d'Haene : découverte pendant ses entraînements, retours d'usage, puis éventuel rôle d'ambassadeur si validé. Storytelling sobre et visuel autour de la montagne en un regard.</p>
+      <p style="font-size:14px;color:var(--muted);margin-top:10px">Note : collaboration envisagée (concept), aucune association officielle à ce stade.</p>
+    </div>
+  </div>
+</section>
+
+<section id="cta" style="text-align:center;padding:100px 20px">
+  <h2 style="margin-bottom:20px">Prêt à voir plus loin ?</h2>
+  <p style="max-width:600px;margin:0 auto 40px">Choisissez votre modèle, recevez-le sous 48h, testez-le 30 jours. Satisfait ou remboursé.</p>
+  <a href="#gamme" class="btn">Découvrir la gamme</a>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>Produit</h4>
+      <a href="#concept">Concept</a>
+      <a href="#gamme">Gamme</a>
+      <a href="#influence">Ambassadeur</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ressources</h4>
+      <a href="#">FAQ</a>
+      <a href="#">Fabrication</a>
+      <a href="#">Distributeurs</a>
+    </div>
+    <div class="footer-col">
+      <h4>Légal</h4>
+      <a href="#">Mentions légales</a>
+      <a href="#">CGU</a>
+      <a href="#">Confidentialité</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">📷</a>
+        <a href="#" aria-label="TikTok">🎵</a>
+      </div>
+      <a href="mailto:contact@lunettes-sport.com">contact@lunettes-sport.com</a>
+    </div>
+  </div>
+</footer>
+
+<div id="modal-rando" class="modal" onclick="if(event.target===this) closeModal('rando')">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>RANDO — Essentiel</h2>
+      <button class="modal-close" onclick="closeModal('rando')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-img">
+          <img src="https://suaps.univ-grenoble-alpes.fr/medias/photo/rando-groupe-1460x973_1688731686726-jpg" alt="RANDO">
+        </div>
+        <div>
+          <h3>Spécifications techniques</h3>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <span class="spec-label">Poids</span>
+              <span class="spec-value">32g</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Autonomie</span>
+              <span class="spec-value">18h</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Résistance</span>
+              <span class="spec-value">IP67</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Garantie</span>
+              <span class="spec-value">24 mois</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Verres inclus</span>
+              <span class="spec-value">2 paires</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Recharge</span>
+              <span class="spec-value">USB-C</span>
+            </div>
+          </div>
+          
+          <h4 style="margin:30px 0 16px;font-size:18px">Fonctionnalités incluses</h4>
+          <ul class="features-list">
+            <li>HUD météo & hydratation</li>
+            <li>Guidage GPS doux</li>
+            <li>SOS discret</li>
+            <li>Altimètre barométrique</li>
+            <li>Verres polarisés catégorie 3</li>
+            <li>Application mobile iOS/Android</li>
+            <li>Mode nuit (luminosité adaptative)</li>
+          </ul>
         </div>
       </div>
     </div>
-  </section>
+    <div class="modal-footer">
+      <div class="modal-price">
+        <span class="price-main">349 €</span>
+        <span style="font-size:13px;color:var(--muted)">Livraison gratuite • Retour 30 jours</span>
+      </div>
+      <button class="modal-cta" onclick="openCheckout('rando', 'RANDO — Essentiel', 349, 'https://suaps.univ-grenoble-alpes.fr/medias/photo/rando-groupe-1460x973_1688731686726-jpg')">
+        Acheter maintenant
+      </button>
+    </div>
+  </div>
+</div>
 
-  <main class="grid">
-    <section class="panel map" id="map">
-      <canvas id="trail"></canvas>
-    </section>
-
-    <aside>
-      <div class="card" id="hud">
-        <h3>HUD (lunettes)</h3>
-        <div class="hud">
-          <div class="tile" data-tip="Température et météo">
-            <h4>Météo</h4>
-            <div style="display:flex;align-items:center;gap:10px">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path d="M6 13a4 4 0 1 0 8 0V5a3 3 0 1 0-6 0v8Z" stroke="currentColor" stroke-width="2" />
-                <path d="M8 13a2 2 0 1 0 4 0" stroke="currentColor" stroke-width="2" />
-              </svg>
-              <strong id="temp">12°C</strong> · <span id="cond" style="opacity:.8">Couvert</span>
+<div id="modal-trail" class="modal" onclick="if(event.target===this) closeModal('trail')">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>TRAIL — Best-seller</h2>
+      <button class="modal-close" onclick="closeModal('trail')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-img">
+          <img src="https://www.lequipe.fr/_medias/img-photo-jpg/running-trail/1500000000883313/13:9,700:467-828-552-75/ceac0.jpg" alt="TRAIL">
+        </div>
+        <div>
+          <h3>Spécifications techniques</h3>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <span class="spec-label">Poids</span>
+              <span class="spec-value">28g</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Autonomie</span>
+              <span class="spec-value">15h</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Résistance</span>
+              <span class="spec-value">IP68</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Garantie</span>
+              <span class="spec-value">24 mois</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Verres inclus</span>
+              <span class="spec-value">3 paires</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Recharge</span>
+              <span class="spec-value">USB-C rapide</span>
             </div>
           </div>
-          <div class="tile" data-tip="Altitude actuelle">
-            <h4>Altitude</h4>
-            <strong id="alt">-- m</strong>
+          
+          <h4 style="margin:30px 0 16px;font-size:18px">Fonctionnalités incluses</h4>
+          <ul class="features-list">
+            <li>HUD D+/km en temps réel</li>
+            <li>Dénivelé live & altitude</li>
+            <li>Détection obstacles IA</li>
+            <li>Navigation Strava/Komoot</li>
+            <li>Cardio optique (zones d'effort)</li>
+            <li>Verres photochromiques inclus</li>
+            <li>Mode nuit anti-éblouissement</li>
+            <li>Notifications smartphone</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="modal-price">
+        <span class="price-main">499 €</span>
+        <span style="font-size:13px;color:var(--muted)">Livraison express offerte • Code TRAIL100 (-100€)</span>
+      </div>
+      <button class="modal-cta" onclick="openCheckout('trail', 'TRAIL — Best-seller', 499, 'https://www.lequipe.fr/_medias/img-photo-jpg/running-trail/1500000000883313/13:9,700:467-828-552-75/ceac0.jpg')">
+        Acheter maintenant
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-triathlon" class="modal" onclick="if(event.target===this) closeModal('triathlon')">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>TRIATHLON — Premium</h2>
+      <button class="modal-close" onclick="closeModal('triathlon')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-img">
+          <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1600" alt="TRIATHLON">
+        </div>
+        <div>
+          <h3>Spécifications techniques</h3>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <span class="spec-label">Poids</span>
+              <span class="spec-value">30g</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Autonomie</span>
+              <span class="spec-value">12h</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Résistance</span>
+              <span class="spec-value">IP68 (1m50)</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Garantie</span>
+              <span class="spec-value">24 mois</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Verres inclus</span>
+              <span class="spec-value">3 paires</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Recharge</span>
+              <span class="spec-value">Sans fil + USB-C</span>
+            </div>
           </div>
-          <div class="tile" data-tip="Cap en degrés">
-            <h4>Cap</h4>
-            <strong id="cap">0°</strong>
+          
+          <h4 style="margin:30px 0 16px;font-size:18px">Fonctionnalités incluses</h4>
+          <ul class="features-list">
+            <li>KM/H, cadence, puissance</li>
+            <li>Parcours prédéfinis (Strava, Komoot, Garmin)</li>
+            <li>Cardio optique + zones d'effort</li>
+            <li>Détection automatique transition (nat/vélo/course)</li>
+            <li>Verres interchangeables (3 paires)</li>
+            <li>Support prioritaire 24/7</li>
+            <li>Coaching IA personnalisé</li>
+            <li>Analyse biomécanique</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="modal-price">
+        <span class="price-main">649 €</span>
+        <span style="font-size:13px;color:var(--muted)">Livraison express • Gravure offerte</span>
+      </div>
+      <button class="modal-cta" onclick="openCheckout('triathlon', 'TRIATHLON — Premium', 649, 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1600')">
+        Acheter maintenant
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="checkout-page" class="checkout-page">
+  <div class="checkout-container">
+    
+    <div class="checkout-header">
+      <button class="checkout-back" onclick="closeCheckout()">← Retour</button>
+      <div class="logo"><span class="mark"></span>LUNETTES SPORT</div>
+      <div style="width:80px"></div>
+    </div>
+
+    <div class="checkout-body">
+      
+      <div class="checkout-form">
+        <h2>Finaliser votre commande</h2>
+        <p style="color:var(--muted);margin-bottom:30px">Livraison gratuite • Retour 30 jours • Paiement sécurisé</p>
+
+        <div class="form-section">
+          <h3>1. Vos coordonnées</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="prenom">Prénom *</label>
+              <input type="text" id="prenom" required>
+            </div>
+            <div class="form-group">
+              <label for="nom">Nom *</label>
+              <input type="text" id="nom" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" required>
+          </div>
+          <div class="form-group">
+            <label for="tel">Téléphone *</label>
+            <input type="tel" id="tel" required>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>2. Adresse de livraison</h3>
+          <div class="form-group">
+            <label for="adresse">Adresse *</label>
+            <input type="text" id="adresse" required>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="cp">Code postal *</label>
+              <input type="text" id="cp" required>
+            </div>
+            <div class="form-group">
+              <label for="ville">Ville *</label>
+              <input type="text" id="ville" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pays">Pays *</label>
+            <select id="pays">
+              <option>France</option>
+              <option>Belgique</option>
+              <option>Suisse</option>
+              <option>Luxembourg</option>
+              <option>Canada</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>3. Paiement sécurisé</h3>
+          
+          <div class="payment-methods">
+            <label class="payment-method active">
+              <input type="radio" name="payment" value="card" checked>
+              <span>💳 Carte bancaire</span>
+            </label>
+            <label class="payment-method">
+              <input type="radio" name="payment" value="paypal">
+              <span>🅿️ PayPal</span>
+            </label>
+            <label class="payment-method">
+              <input type="radio" name="payment" value="klarna">
+              <span>🛍️ Klarna (3x sans frais)</span>
+            </label>
+          </div>
+
+          <div id="card-form">
+            <div class="form-group">
+              <label for="card-number">Numéro de carte *</label>
+              <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="card-expiry">Date d'expiration *</label>
+                <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5">
+              </div>
+              <div class="form-group">
+                <label for="card-cvv">CVV *</label>
+                <input type="text" id="card-cvv" placeholder="123" maxlength="3">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:30px">
+          <label class="checkbox-label">
+            <input type="checkbox" id="cgu" required>
+            <span>J'accepte les <a href="#" style="text-decoration:underline;color:var(--c1)">CGU</a> et la <a href="#" style="text-decoration:underline;color:var(--c1)">politique de confidentialité</a></span>
+          </label>
+        </div>
+
+        <button class="checkout-btn" onclick="validateCheckout()">
+          <span>Valider la commande</span>
+          <span id="btn-total">349 €</span>
+        </button>
+
+        <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:16px">
+          🔒 Paiement sécurisé SSL • Cryptage AES-256
+        </p>
+      </div>
+
+      <div class="checkout-summary">
+        <div class="summary-card">
+          <h3>Récapitulatif</h3>
+          
+          <div class="summary-product">
+            <img id="summary-img" src="" alt="">
+            <div>
+              <div class="summary-product-name" id="summary-name">—</div>
+              <div class="summary-product-qty">Quantité : 1</div>
+            </div>
+          </div>
+
+          <div class="summary-line">
+            <span>Sous-total</span>
+            <span id="summary-subtotal">—</span>
+          </div>
+          <div class="summary-line">
+            <span>Livraison</span>
+            <span style="color:var(--c1);font-weight:600">Gratuite 🎁</span>
+          </div>
+          <div class="summary-line promo">
+            <span>Code promo</span>
+            <input type="text" id="promo-code" placeholder="Tu vas payer">
+            <button onclick="applyPromo()">OK</button>
+          </div>
+          <div class="summary-line total">
+            <span>Total</span>
+            <span id="summary-total">—</span>
+          </div>
+
+          <div class="trust-badges">
+            <div class="trust-badge">
+              <span style="font-size:20px">✓</span>
+              <span>Paiement<br>sécurisé</span>
+            </div>
+            <div class="trust-badge">
+              <span style="font-size:20px">📦</span>
+              <span>Livraison<br>express</span>
+            </div>
+            <div class="trust-badge">
+              <span style="font-size:20px">↩️</span>
+              <span>Retour<br>30 jours</span>
+            </div>
+          </div>
+
+          <div class="guarantee">
+            <strong>Garantie satisfait ou remboursé</strong>
+            <p style="font-size:13px;color:var(--muted);margin-top:6px">Essayez vos lunettes 30 jours. Si elles ne vous conviennent pas, retour gratuit et remboursement intégral.</p>
           </div>
         </div>
       </div>
 
-      <div class="card" id="controls" style="margin-top:12px">
-        <h3>Contrôles rapides</h3>
-        <div class="control-group">
-          <div class="switch"><label>Mode Nuit</label>
-            <div class="toggle" data-toggle="night"></div>
-          </div>
-          <div class="switch"><label>Cartes hors‑ligne</label>
-            <div class="toggle active" data-toggle="offline"></div>
-          </div>
-          <div class="switch"><label>Auto‑pause</label>
-            <div class="toggle" data-toggle="autopause"></div>
-          </div>
-          <div class="switch"><label>Annonces vocales</label>
-            <div class="toggle active" data-toggle="voice"></div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
-          <div class="sos"><span class="pulse"></span><strong>SOS</strong></div>
-          <button class="btn" id="btnSOS">Déclencher</button>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
-          <div style="display:flex;align-items:center;gap:10px"><strong>Commande vocale</strong>
-            <div class="eq" aria-hidden><i></i><i></i><i></i><i></i><i></i></div>
-          </div>
-          <button class="btn ghost" id="btnVoice">Parler</button>
-        </div>
-      </div>
+    </div>
+  </div>
+</div>
 
-      <div class="card" id="challenges" style="margin-top:12px">
-        <h3>Défis & objectifs</h3>
-        <div class="list">
-          <div class="row"><span>Sommet 500 m+</span>
-            <div class="progress" style="width:48%">
-              <div class="bar" style="width:60%"></div>
-            </div>
-          </div>
-          <div class="row"><span>Itinéraire 10 km</span>
-            <div class="progress" style="width:48%">
-              <div class="bar" style="width:35%"></div>
-            </div>
-          </div>
-          <div class="row"><span>Rythme &lt; 7:00</span>
-            <div class="progress" style="width:48%">
-              <div class="bar" style="width:80%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card" id="settings" style="margin-top:12px">
-        <h3>Paramètres</h3>
-        <div style="display:grid; gap:10px">
-          <div class="row"><span>Style HUD</span><select id="styleHUD"
-              style="background:transparent;color:#e8f1ff;border:1px solid rgba(255,255,255,.2);padding:8px;border-radius:10px">
-              <option>Minimal</option>
-              <option>Complet</option>
-              <option>Trail</option>
-            </select></div>
-          <div class="row"><span>Mise à jour du firmware</span><button class="btn ghost" id="btnFW">Vérifier</button>
-          </div>
-          <div class="row"><span>Partager la position</span><button class="btn" id="btnShare">Partager</button></div>
-        </div>
-      </div>
-    </aside>
-  </main>
-
-  <footer class="footer">
-    <small>© <span id="year"></span> TRAKR · Lunettes connectées de randonnée · Palette couleurs: <strong
-        style="color:var(--primary)">#8bcdf2</strong> & <strong style="color:var(--muted)">#d3d3d3</strong></small>
-  </footer>
-
-  <script>
-    const $ = (id) => document.getElementById(id);
-    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-
-    function animateNumber(el, from, to, duration = 1200, formatter = (v) => v.toFixed(1)) {
-      const start = performance.now();
-      function step(ts) {
-        const p = Math.min(1, (ts - start) / duration);
-        const val = from + (to - from) * p;
-        el.textContent = formatter(val);
-        if (p < 1) requestAnimationFrame(step)
-      }
-      requestAnimationFrame(step)
-    }
-
-    // Initialize counters
-    const kmEl = $("km"), elevEl = $("elev"), paceEl = $("pace"), hrEl = $("hr");
-    function randomizeMetrics() {
-      animateNumber(kmEl, parseFloat(kmEl.textContent) || 0, (Math.random() * 2 + 1), 1300, v => v.toFixed(1) + " km");
-      animateNumber(elevEl, parseFloat(elevEl.textContent) || 0, Math.floor(Math.random() * 90 + 20), 1000, v => Math.floor(v) + " m");
-      // pace
-      const m = Math.floor(Math.random() * 4) + 5, s = Math.floor(Math.random() * 60);
-      paceEl.textContent = `${m}:${String(s).padStart(2, '0')}`;
-      // heart rate
-      hrEl.textContent = (Math.floor(Math.random() * 40) + 95) + " bpm";
-    }
-    setInterval(randomizeMetrics, 2600);
-    randomizeMetrics();
-
-    // Bars (battery, gps...)
-    function setBar(id, v) { const el = $(id); if (!el) return; el.style.width = Math.max(5, Math.min(100, v)) + "%"; }
-    function jitter() { setBar('batGlass', 70 + Math.random() * 20); setBar('batPhone', 40 + Math.random() * 40); setBar('gps', 60 + Math.random() * 35); setBar('ble', 80 + Math.random() * 15); }
-    jitter(); setInterval(jitter, 2200);
-
-    // Compass animation
-    const needle = $("needle"), cap = $("cap");
-    let heading = 0; setInterval(() => { heading = (heading + (Math.random() * 20 - 10) + 360) % 360; needle.style.transform = `translate(-50%,-80%) rotate(${heading}deg)`; cap.textContent = `${Math.round(heading)}°`; }, 1200);
-
-    // HUD misc
-    const alt = $("alt"); setInterval(() => { alt.textContent = (800 + Math.random() * 40 | 0) + ' m'; }, 2100);
-
-    // Equalizer active on voice button
-    $("btnVoice").addEventListener('click', () => {
-      const btn = event.currentTarget; btn.textContent = 'Écoute…'; btn.disabled = true;
-      setTimeout(() => { btn.textContent = 'Parler'; btn.disabled = false; }, 2400);
-    });
-
-    // SOS
-    $("btnSOS").addEventListener('click', async () => {
-      const btn = event.currentTarget; const txt = btn.textContent; btn.textContent = 'Envoi…';
-      btn.style.transform = 'scale(0.98)'; await sleep(800); btn.style.transform = '';
-      alert('SOS transmis avec votre position.'); btn.textContent = txt;
-    });
-
-    // Toggles
-    document.querySelectorAll('.toggle').forEach(t => {
-      t.addEventListener('click', () => t.classList.toggle('active'))
-    })
-
-    // Firmware check
-    $("btnFW").addEventListener('click', async () => {
-      const b = event.currentTarget; b.textContent = 'Recherche…'; await sleep(1200); b.textContent = 'À jour ✓';
-    })
-
-    // Share
-    $("btnShare").addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText('Ma position TRAKR: 45.832, 6.865'); alert('Lien de position copié.'); } catch { alert('Copie impossible'); }
-    });
-
-    // Map canvas demo (animated trail)
-    const canvas = $("trail"); const ctx = canvas.getContext('2d');
-    const DPR = Math.min(2, window.devicePixelRatio || 1);
-    function resize() { canvas.width = canvas.clientWidth * DPR; canvas.height = canvas.clientHeight * DPR; }
-    const points = [];
-    function addPoint() {
-      const last = points[points.length - 1] || { x: 80, y: canvas.height - 80 };
-      const nx = last.x + (Math.random() * 60 + 40);
-      const ny = last.y + (Math.random() * 40 - 20);
-      points.push({ x: Math.min(canvas.width - 40, nx), y: Math.max(40, Math.min(canvas.height - 40, ny)) });
-      if (points.length > 40) points.shift();
-    }
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // background grid
-      ctx.save(); ctx.globalAlpha = .12; ctx.strokeStyle = '#d3d3d3';
-      const step = 40 * DPR; for (let x = 0; x < canvas.width; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
-      for (let y = 0; y < canvas.height; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
-      ctx.restore();
-      // path
-      if (points.length > 1) {
-        const grad = ctx.createLinearGradient(0, 0, canvas.width, 0); grad.addColorStop(0, '#8bcdf2'); grad.addColorStop(1, '#4aa7da');
-        ctx.lineWidth = 4 * DPR; ctx.strokeStyle = grad; ctx.shadowColor = 'rgba(139,205,242,.6)'; ctx.shadowBlur = 14 * DPR; ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y); for (const p of points.slice(1)) { ctx.lineTo(p.x, p.y); } ctx.stroke();
-        // moving dot
-        const t = Date.now() / 900; const idx = Math.floor((t % points.length)); const p = points[idx];
-        if (p) { ctx.fillStyle = '#8bcdf2'; ctx.beginPath(); ctx.arc(p.x, p.y, 6 * DPR, 0, Math.PI * 2); ctx.fill(); }
-      }
-      requestAnimationFrame(draw);
-    }
-    new ResizeObserver(resize).observe(canvas); resize();
-    for (let i = 0; i < 18; i++) addPoint(); setInterval(addPoint, 1200);
-    draw();
-
-    // Footer year
-    $("year").textContent = new Date().getFullYear();
-
-    // Smooth anchor scroll
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => { e.preventDefault(); document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' }); })
-    })
-  </script>
+<script src="script.js"></script>
 </body>
-
 </html>
