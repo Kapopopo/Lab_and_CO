@@ -1,0 +1,1700 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lunettes de sport — SEMAINE INNOVATION</title>
+  <meta name="description"
+    content="Lunettes de sport connectées: HUD D+, GPS, parcours type Strava, cardio, hydratation, météo, SOS. Performance & sécurité.">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="/images/logo_trakr.png" rel="stylesheet">
+  <style>
+    :root {
+      --c1: #8BCDF2;
+      --c2: #D3D3D3;
+      --ink: #0F172A;
+      --muted: #64748B;
+      --white: #fff;
+      --glass: rgba(255, 255, 255, .6);
+      --stroke: rgba(15, 23, 42, .08);
+      --shadow: 0 20px 50px rgba(0, 0, 0, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: Outfit, Inter, sans-serif;
+      font-weight: 800;
+      line-height: 1.1
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 64px);
+      letter-spacing: -.02em
+    }
+
+    h2 {
+      font-size: clamp(26px, 4vw, 48px)
+    }
+
+    h3 {
+      font-size: clamp(20px, 3vw, 28px)
+    }
+
+    p {
+      color: var(--muted);
+      font-size: clamp(15px, 2vw, 18px);
+      line-height: 1.65
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit
+    }
+
+    /* Nav responsive */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    nav .inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      box-shadow: var(--shadow)
+    }
+
+    nav ul {
+      display: flex;
+      gap: 20px;
+      list-style: none
+    }
+
+    nav a {
+      font-weight: 600;
+      color: var(--muted);
+      transition: .2s;
+      font-size: 14px
+    }
+
+    nav a:hover {
+      color: var(--ink)
+    }
+
+    /* Hero avec carrousel */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      overflow: hidden;
+    }
+
+    /* Carrousel d'images en fond */
+    .hero-carousel {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+    }
+
+    .hero-slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(139, 205, 242, .85), rgba(211, 211, 211, .85));
+    }
+
+    /* Contenu hero par-dessus */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 24px;
+      border: 1px solid var(--stroke);
+    }
+
+    .hero h1 {
+      margin-bottom: 24px;
+      color: var(--ink);
+    }
+
+    .hero p {
+      font-size: clamp(16px, 2.5vw, 22px);
+      margin-bottom: 40px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 16px 36px;
+      background: linear-gradient(135deg, var(--c1), #5BA3D0);
+      color: var(--white);
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 16px;
+      transition: .3s;
+      box-shadow: var(--shadow);
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 25px 60px rgba(139, 205, 242, .4);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      color: var(--ink);
+      border: 2px solid var(--ink);
+    }
+
+    .btn-outline:hover {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    /* Indicateurs carrousel */
+    .carousel-dots {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      gap: 12px;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .4);
+      border: 2px solid var(--white);
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .carousel-dot.active {
+      background: var(--white);
+      transform: scale(1.3);
+    }
+
+    /* Bandeau marquee */
+    .marquee {
+      background: var(--ink);
+      color: var(--white);
+      padding: 20px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-content {
+      display: inline-block;
+      animation: scroll 30s linear infinite;
+      padding-right: 100%;
+    }
+
+    .marquee span {
+      display: inline-block;
+      padding: 0 40px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(-100%)
+      }
+    }
+
+    /* Sections produits */
+    section {
+      padding: 80px 20px;
+    }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .section-img {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .section-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+    }
+
+    .section-text h2 {
+      margin-bottom: 20px;
+      color: var(--ink);
+    }
+
+    .section-text p {
+      margin-bottom: 16px;
+    }
+
+    /* Grille produits */
+    .products-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding: 0 20px;
+    }
+
+    .product-card {
+      background: var(--white);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: .3s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, .15);
+    }
+
+    .product-img {
+      position: relative;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+    }
+
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: .3s;
+    }
+
+    .product-card:hover .product-img img {
+      transform: scale(1.05);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 8px 16px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      border: 1px solid var(--stroke);
+    }
+
+    .product-body {
+      padding: 30px;
+    }
+
+    .product-body h3 {
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+
+    .product-body p {
+      margin-bottom: 20px;
+    }
+
+    .product-price {
+      font-weight: 800;
+      font-size: 28px;
+      color: var(--ink);
+      margin-bottom: 20px;
+      font-family: Outfit, sans-serif;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--ink);
+      color: var(--white);
+      padding: 60px 20px 30px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .footer-col h4 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .footer-col a {
+      display: block;
+      color: rgba(255, 255, 255, .7);
+      margin-bottom: 10px;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--c1);
+    }
+
+    .socials {
+      display: flex;
+      gap: 12px;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .8);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      padding: 20px;
+      overflow-y: auto;
+      animation: fadeIn .3s ease;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--white);
+      border-radius: 24px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, .3);
+      animation: slideUp .3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    .modal-header {
+      position: relative;
+      padding: 30px;
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(15, 23, 42, .05);
+      font-size: 24px;
+      cursor: pointer;
+      transition: .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      background: rgba(15, 23, 42, .1);
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      padding: 40px 30px;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .modal-img {
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 16/10;
+    }
+
+    .modal-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin: 30px 0;
+    }
+
+    .spec-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px;
+      background: rgba(139, 205, 242, .05);
+      border-radius: 12px;
+      border-left: 4px solid var(--c1);
+    }
+
+    .spec-label {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .spec-value {
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .features-list {
+      list-style: none;
+      margin: 24px 0;
+    }
+
+    .features-list li {
+      padding: 12px 0 12px 32px;
+      position: relative;
+      color: var(--muted);
+    }
+
+    .features-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--c1);
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .modal-footer {
+      padding: 30px;
+      border-top: 1px solid var(--stroke);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .modal-price {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .price-main {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--ink);
+      font-family: Outfit, sans-serif;
+    }
+
+    .modal-cta {
+      padding: 16px 36px;
+      background: linear-gradient(135deg, var(--c1), #5BA3D0);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: .3s;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(139, 205, 242, .4);
+    }
+
+    /* Responsive */
+    @media (min-width:768px) {
+      nav ul {
+        gap: 28px
+      }
+
+      .section-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+      }
+
+      .products-grid {
+        /* MODIFICATION : Passage de 3 à 2 colonnes, et max-width réduit pour centrer */
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 980px;
+      }
+
+      .footer-inner {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .modal-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .specs-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width:767px) {
+      nav ul {
+        display: none
+      }
+
+      .hero {
+        min-height: 80vh;
+        padding: 40px 20px
+      }
+
+      .carousel-dots {
+        bottom: 20px
+      }
+
+      .modal-content {
+        margin: 20px 0;
+      }
+
+      .modal-footer {
+        flex-direction: column;
+      }
+
+      .modal-cta {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="inner">
+      <a href="#" class="logo">
+        <span class="mark"></span>
+        Trakr
+      </a>
+      <ul>
+        <li><a href="#concept">Concept</a></li>
+        <li><a href="#gamme">Gamme</a></li>
+        <li><a href="#influence">Ambassadeur</a></li>
+        <li><a href="#cta">Contact</a></li>
+      </ul>
+      <a href="bibi.html" class="explorer-btn">Explorer</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-carousel">
+      <div class="hero-slide active"
+        style="background-image:url('https://images.unsplash.com/photo-1549576490-b0b4831ef60a?q=80&w=2400')"></div>
+      <div class="hero-slide"
+        style="background-image:url('https://images.unsplash.com/photo-1452573992436-6d508f200b30?q=80&w=2400')"></div>
+      <div class="hero-slide"
+        style="background-image:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2400')"></div>
+      <div class="hero-slide"
+        style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2400')"></div>
+    </div>
+
+    <div class="hero-content">
+      <span class="hero-badge">🚀 SEMAINE INNOVATION</span>
+      <h1>Voyez plus loin</h1>
+      <p>Lunettes de sport connectées : HUD D+ intégré, GPS live, parcours type Strava, cardio, hydratation, météo, SOS.
+        Performance, nature et sécurité en un regard.</p>
+      <div class="hero-cta">
+        <a href="#gamme" class="btn">Découvrir la gamme</a>
+        <a href="#concept" class="btn btn-outline">En savoir plus</a>
+      </div>
+    </div>
+
+    <div class="carousel-dots">
+      <span class="carousel-dot active" onclick="goToSlide(0)"></span>
+      <span class="carousel-dot" onclick="goToSlide(1)"></span>
+      <span class="carousel-dot" onclick="goToSlide(2)"></span>
+      <span class="carousel-dot" onclick="goToSlide(3)"></span>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-content">
+      <span>✓ HUD Display+ intégré</span>
+      <span>✓ GPS & Parcours Strava</span>
+      <span>✓ Cardio optique</span>
+      <span>✓ Météo live</span>
+      <span>✓ SOS intégré</span>
+      <span>✓ Détection obstacles IA</span>
+      <span>✓ HUD Display+ intégré</span>
+      <span>✓ GPS & Parcours Strava</span>
+      <span>✓ Cardio optique</span>
+      <span>✓ Météo live</span>
+    </div>
+  </div>
+
+  <section id="concept">
+    <div class="section-inner">
+      <div class="section-img">
+        <img src="https://images.unsplash.com/photo-1452573992436-6d508f200b30?q=80&w=1600" alt="Trail nature">
+      </div>
+      <div class="section-text">
+        <h2>Un regard suffit</h2>
+        <p>Conçues pour les sportifs exigeants, nos lunettes intègrent un affichage tête haute (HUD) discret : vitesse,
+          distance, dénivelé, cardio, météo, hydratation. Guidage GPS type Strava pour suivre vos parcours.</p>
+        <p>Monture ultra-légère en carbone (28g), résistante (IP68), avec capteurs cardio optique et détection
+          d'obstacles par IA. Finition mate, verres polarisés interchangeables.</p>
+        <a href="#gamme" class="btn">Explorer la gamme</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="gamme" style="background:rgba(255,255,255,.3);backdrop-filter:blur(12px)">
+    <div style="max-width:1400px;margin:0 auto;padding:0 20px;text-align:center;margin-bottom:50px">
+      <h2>Notre gamme</h2>
+      <p style="max-width:700px;margin:20px auto 0">Deux modèles pour tous les sportifs. Choisissez entre l'essentiel et
+        la performance absolue.</p>
+    </div>
+
+    <div class="products-grid">
+
+      <div class="product-card" onclick="openModal('standard')">
+        <div class="product-img">
+          <img src="images/lunette_standard.png" alt="STANDARD">
+          <span class="product-badge">Standard</span>
+        </div>
+        <div class="product-body">
+          <h3>STANDARD</h3>
+          <p>Le modèle essentiel pour toutes vos activités. GPS, cardio optique, météo et guidage simple.</p>
+          <div class="product-price">399 €</div>
+          <button class="btn" style="width:100%" onclick="event.stopPropagation();openModal('standard')">Voir la fiche
+            technique</button>
+        </div>
+      </div>
+
+      <div class="product-card" onclick="openModal('premium')">
+        <div class="product-img">
+          <img src="images/lunette_premium.png" alt="PREMIUM">
+          <span class="product-badge" style="background:var(--c1);color:var(--white);border:none">Premium</span>
+        </div>
+        <div class="product-body">
+          <h3>PREMIUM</h3>
+          <p>Toutes les fonctionnalités : HUD D+, détection IA, monture carbone. Pour la performance pure.</p>
+          <div class="product-price">599 €</div>
+          <button class="btn" style="width:100%" onclick="event.stopPropagation();openModal('premium')">Voir la fiche
+            technique</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="influence">
+    <div class="section-inner">
+      <div class="section-img">
+        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1600" alt="Crêtes montagne">
+      </div>
+      <div class="section-text">
+        <h2>"Voir plus loin"</h2>
+        <p>Collaboration "test terrain" avec François d'Haene : découverte pendant ses entraînements, retours d'usage,
+          puis éventuel rôle d'ambassadeur si validé. Storytelling sobre et visuel autour de la montagne en un regard.
+        </p>
+        <p style="font-size:14px;color:var(--muted);margin-top:10px">Note : collaboration envisagée (concept), aucune
+          association officielle à ce stade.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta" style="text-align:center;padding:100px 20px">
+    <h2 style="margin-bottom:20px">Prêt à voir plus loin ?</h2>
+    <p style="max-width:600px;margin:0 auto 40px">Choisissez votre modèle, recevez-le sous 48h, testez-le 30 jours.
+      Satisfait ou remboursé.</p>
+    <a href="#gamme" class="btn">Découvrir la gamme</a>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Produit</h4>
+        <a href="#concept">Concept</a>
+        <a href="#gamme">Gamme</a>
+        <a href="#influence">Ambassadeur</a>
+      </div>
+      <div class="footer-col">
+        <h4>Ressources</h4>
+        <a href="#">FAQ</a>
+        <a href="#">Fabrication</a>
+        <a href="#">Distributeurs</a>
+      </div>
+      <div class="footer-col">
+        <h4>Légal</h4>
+        <a href="#">Mentions légales</a>
+        <a href="#">CGU</a>
+        <a href="#">Confidentialité</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <div class="socials">
+          <a href="#" aria-label="Instagram">📷</a>
+          <a href="#" aria-label="TikTok">🎵</a>
+        </div>
+        <a href="mailto:contact@lunettes-sport.com">contact@lunettes-sport.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="modal-standard" class="modal" onclick="if(event.target===this) closeModal('standard')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>STANDARD — L'essentiel</h2>
+        <button class="modal-close" onclick="closeModal('standard')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div class="modal-img">
+            <img src="images/lunette_standard.png" alt="STANDARD">
+          </div>
+          <div>
+            <h3>Spécifications techniques</h3>
+            <div class="specs-grid">
+              <div class="spec-item">
+                <span class="spec-label">Poids</span>
+                <span class="spec-value">30g</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Autonomie</span>
+                <span class="spec-value">16h</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Résistance</span>
+                <span class="spec-value">IP67</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Garantie</span>
+                <span class="spec-value">12 mois</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Verres inclus</span>
+                <span class="spec-value">1 paire polarisée</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Recharge</span>
+                <span class="spec-value">USB-C</span>
+              </div>
+            </div>
+
+            <h4 style="margin:30px 0 16px;font-size:18px">Fonctionnalités incluses</h4>
+            <ul class="features-list">
+              <li>Affichage vitesse & distance</li>
+              <li>GPS guidage simple</li>
+              <li>Capteur cardio optique</li>
+              <li>Alerte météo</li>
+              <li>Rappel hydratation</li>
+              <li>Bouton SOS</li>
+              <li>Monture polycarbonate</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-price">
+          <span class="price-main">399 €</span>
+          <span style="font-size:13px;color:var(--muted)">Livraison gratuite • Retour 30j</span>
+        </div>
+        <button class="modal-cta"
+          onclick="openCheckout('standard', 'STANDARD — L\'essentiel', 399, 'images/standard.jpg')">
+          Acheter maintenant
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-premium" class="modal" onclick="if(event.target===this) closeModal('premium')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>PREMIUM — Performance</h2>
+        <button class="modal-close" onclick="closeModal('premium')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div class="modal-img">
+            <img src="images/lunette_premium.png" alt="PREMIUM">
+          </div>
+          <div>
+            <h3>Spécifications techniques</h3>
+            <div class="specs-grid">
+              <div class="spec-item">
+                <span class="spec-label">Poids</span>
+                <span class="spec-value">28g (Carbone)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Autonomie</span>
+                <span class="spec-value">14h (HUD+)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Résistance</span>
+                <span class="spec-value">IP68</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Garantie</span>
+                <span class="spec-value">24 mois</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Verres inclus</span>
+                <span class="spec-value">3 paires (Photochromique)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Recharge</span>
+                <span class="spec-value">USB-C rapide</span>
+              </div>
+            </div>
+
+            <h4 style="margin:30px 0 16px;font-size:18px">Fonctionnalités incluses</h4>
+            <ul class="features-list">
+              <li>HUD D+ temps réel</li>
+              <li>Navigation parcours (Strava, Komoot)</li>
+              <li>Capteur cardio optique avancé</li>
+              <li>Détection obstacles IA</li>
+              <li>Météo live + alertes orage</li>
+              <li>Monture carbone ultra-légère</li>
+              <li>Coaching vocal intégré</li>
+              <li>Analyse biomécanique</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-price">
+          <span class="price-main">599 €</span>
+          <span style="font-size:13px;color:var(--muted)">Livraison express • Gravure offerte</span>
+        </div>
+        <button class="modal-cta" onclick="openCheckout('premium', 'PREMIUM — Performance', 599, 'images/premium.jpg')">
+          Acheter maintenant
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="checkout-page" class="checkout-page">
+    <div class="checkout-container">
+
+      <div class="checkout-header">
+        <button class="checkout-back" onclick="closeCheckout()">← Retour</button>
+        <div class="logo"><span class="mark"></span>LUNETTES SPORT</div>
+        <div style="width:80px"></div>
+      </div>
+
+      <div class="checkout-body">
+
+        <div class="checkout-form">
+          <h2>Finaliser votre commande</h2>
+          <p style="color:var(--muted);margin-bottom:30px">Livraison gratuite • Retour 30 jours • Paiement sécurisé</p>
+
+          <div class="form-section">
+            <h3>1. Vos coordonnées</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="prenom">Prénom *</label>
+                <input type="text" id="prenom" required>
+              </div>
+              <div class="form-group">
+                <label for="nom">Nom *</label>
+                <input type="text" id="nom" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+              <label for="tel">Téléphone *</label>
+              <input type="tel" id="tel" required>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>2. Adresse de livraison</h3>
+            <div class="form-group">
+              <label for="adresse">Adresse *</label>
+              <input type="text" id="adresse" required>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="cp">Code postal *</label>
+                <input type="text" id="cp" required>
+              </div>
+              <div class="form-group">
+                <label for="ville">Ville *</label>
+                <input type="text" id="ville" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pays">Pays *</label>
+              <select id="pays">
+                <option>France</option>
+                <option>Belgique</option>
+                <option>Suisse</option>
+                <option>Luxembourg</option>
+                <option>Canada</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>3. Paiement sécurisé</h3>
+
+            <div class="payment-methods">
+              <label class="payment-method active">
+                <input type="radio" name="payment" value="card" checked>
+                <span>💳 Carte bancaire</span>
+              </label>
+              <label class="payment-method">
+                <input type="radio" name="payment" value="paypal">
+                <span>🅿️ PayPal</span>
+              </label>
+              <label class="payment-method">
+                <input type="radio" name="payment" value="klarna">
+                <span>🛍️ Klarna (3x sans frais)</span>
+              </label>
+            </div>
+
+            <div id="card-form">
+              <div class="form-group">
+                <label for="card-number">Numéro de carte *</label>
+                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+              </div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="card-expiry">Date d'expiration *</label>
+                  <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5">
+                </div>
+                <div class="form-group">
+                  <label for="card-cvv">CVV *</label>
+                  <input type="text" id="card-cvv" placeholder="123" maxlength="3">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:30px">
+            <label class="checkbox-label">
+              <input type="checkbox" id="cgu" required>
+              <span>J'accepte les <a href="#" style="text-decoration:underline;color:var(--c1)">CGU</a> et la <a
+                  href="#" style="text-decoration:underline;color:var(--c1)">politique de confidentialité</a></span>
+            </label>
+          </div>
+
+          <button class="checkout-btn" onclick="validateCheckout()">
+            <span>Valider la commande</span>
+            <span id="btn-total">349 €</span>
+          </button>
+
+          <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:16px">
+            🔒 Paiement sécurisé SSL • Cryptage AES-256
+          </p>
+        </div>
+
+        <div class="checkout-summary">
+          <div class="summary-card">
+            <h3>Récapitulatif</h3>
+
+            <div class="summary-product">
+              <img id="summary-img" src="" alt="">
+              <div>
+                <div class="summary-product-name" id="summary-name">—</div>
+                <div class="summary-product-qty">Quantité : 1</div>
+              </div>
+            </div>
+
+            <div class="summary-line">
+              <span>Sous-total</span>
+              <span id="summary-subtotal">—</span>
+            </div>
+            <div class="summary-line">
+              <span>Livraison</span>
+              <span style="color:var(--c1);font-weight:600">Gratuite 🎁</span>
+            </div>
+            <div class="summary-line promo">
+              <span>Code promo</span>
+              <input type="text" id="promo-code" placeholder="TRAIL100">
+              <button onclick="applyPromo()">OK</button>
+            </div>
+            <div class="summary-line total">
+              <span>Total</span>
+              <span id="summary-total">—</span>
+            </div>
+
+            <div class="trust-badges">
+              <div class="trust-badge">
+                <span style="font-size:20px">✓</span>
+                <span>Paiement<br>sécurisé</span>
+              </div>
+              <div class="trust-badge">
+                <span style="font-size:20px">📦</span>
+                <span>Livraison<br>express</span>
+              </div>
+              <div class="trust-badge">
+                <span style="font-size:20px">↩️</span>
+                <span>Retour<br>30 jours</span>
+              </div>
+            </div>
+
+            <div class="guarantee">
+              <strong>Garantie satisfait ou remboursé</strong>
+              <p style="font-size:13px;color:var(--muted);margin-top:6px">Essayez vos lunettes 30 jours. Si elles ne
+                vous conviennent pas, retour gratuit et remboursement intégral.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* Styles checkout (ajout) */
+    .checkout-page {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      z-index: 10000;
+      overflow-y: auto;
+      animation: fadeIn .4s ease;
+    }
+
+    .checkout-page.active {
+      display: block;
+    }
+
+    .checkout-container {
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    .checkout-header {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--stroke);
+      padding: 0 20px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .checkout-back {
+      background: transparent;
+      border: none;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 15px;
+      transition: .2s;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .checkout-back:hover {
+      background: rgba(15, 23, 42, .05);
+    }
+
+    .checkout-body {
+      max-width: 1400px;
+      margin: 40px auto 0;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .checkout-form {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-section {
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .form-section:last-of-type {
+      border: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .form-section h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--ink);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--stroke);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: .2s;
+      background: var(--white);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--c1);
+      box-shadow: 0 0 0 3px rgba(139, 205, 242, .1);
+    }
+
+    .payment-methods {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .payment-method {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border: 2px solid var(--stroke);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: .2s;
+      background: var(--white);
+    }
+
+    .payment-method:hover {
+      border-color: var(--c1);
+      background: rgba(139, 205, 242, .03);
+    }
+
+    .payment-method.active {
+      border-color: var(--c1);
+      background: rgba(139, 205, 242, .08);
+    }
+
+    .payment-method input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--c1);
+    }
+
+    .payment-method span {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: start;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--c1);
+      cursor: pointer;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 18px 32px;
+      background: linear-gradient(135deg, var(--c1), #5BA3D0);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: .2s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .checkout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(139, 205, 242, .4);
+    }
+
+    .checkout-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .checkout-summary {
+      position: relative;
+    }
+
+    .summary-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 30px 24px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 100px;
+    }
+
+    .summary-card h3 {
+      font-size: 22px;
+      margin-bottom: 24px;
+      color: var(--ink);
+    }
+
+    .summary-product {
+      display: flex;
+      gap: 16px;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .summary-product img {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+    }
+
+    .summary-product-name {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+
+    .summary-product-qty {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+
+    .summary-line.promo {
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .summary-line.promo input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 2px solid var(--stroke);
+      border-radius: 8px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .summary-line.promo button {
+      padding: 8px 16px;
+      background: var(--ink);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .summary-line.promo button:hover {
+      background: var(--c1);
+    }
+
+    .summary-line.total {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 2px solid var(--stroke);
+      font-size: 20px;
+      font-weight: 800;
+      font-family: Outfit, sans-serif;
+    }
+
+    .trust-badges {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .trust-badge {
+      text-align: center;
+      padding: 12px 8px;
+      background: rgba(139, 205, 242, .08);
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--muted);
+    }
+
+    .guarantee {
+      background: rgba(139, 205, 242, .08);
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 24px;
+      border-left: 4px solid var(--c1);
+    }
+
+    .guarantee strong {
+      display: block;
+      color: var(--ink);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    @media (min-width: 768px) {
+      .checkout-body {
+        grid-template-columns: 1.5fr 1fr;
+        gap: 50px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .payment-methods {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .checkout-form {
+        padding: 30px 20px;
+      }
+
+      .summary-card {
+        position: relative;
+        top: 0;
+      }
+
+      .trust-badges {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    // CARROUSEL HERO
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+
+    function showSlide(n) {
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+
+      currentSlide = (n + slides.length) % slides.length;
+
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function goToSlide(n) {
+      showSlide(n);
+    }
+
+    // Auto-défilement toutes les 5 secondes
+    setInterval(nextSlide, 5000);
+
+    // MODALS
+    function openModal(model) {
+      document.getElementById('modal-' + model).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(model) {
+      document.getElementById('modal-' + model).classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal').forEach(m => {
+          m.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        });
+      }
+    });
+
+    // CHECKOUT
+    let currentProduct = {
+      name: '',
+      price: 0,
+      image: '',
+      model: ''
+    };
+
+    function openCheckout(model, name, price, image) {
+      currentProduct = { model, name, price, image };
+
+      document.getElementById('summary-name').textContent = name;
+      document.getElementById('summary-img').src = image;
+      document.getElementById('summary-subtotal').textContent = price + ' €';
+      document.getElementById('summary-total').textContent = price + ' €';
+      document.getElementById('btn-total').textContent = price + ' €';
+
+      document.getElementById('checkout-page').classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      closeModal(model);
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkout-page').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function applyPromo() {
+      const code = document.getElementById('promo-code').value.toUpperCase();
+      const subtotal = currentProduct.price;
+      let discount = 0;
+
+      if (code === 'TRAIL100') {
+        discount = 100;
+        alert('✅ Code promo appliqué : -100 € !');
+      } else if (code === 'WELCOME50') {
+        discount = 50;
+        alert('✅ Code promo appliqué : -50 € !');
+      } else {
+        alert('❌ Code promo invalide');
+        return;
+      }
+
+      const newTotal = subtotal - discount;
+      document.getElementById('summary-total').textContent = newTotal + ' €';
+      document.getElementById('btn-total').textContent = newTotal + ' €';
+    }
+
+    function validateCheckout() {
+      const form = document.querySelector('.checkout-form');
+      const inputs = form.querySelectorAll('input[required]');
+      let valid = true;
+
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          valid = false;
+          input.style.borderColor = '#ef4444';
+        } else {
+          input.style.borderColor = '';
+        }
+      });
+
+      const cgu = document.getElementById('cgu');
+      if (!cgu.checked) {
+        valid = false;
+        alert('⚠️ Veuillez accepter les CGU');
+        return;
+      }
+
+      if (!valid) {
+        alert('⚠️ Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      const btn = document.querySelector('.checkout-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Traitement en cours...</span>';
+
+      setTimeout(() => {
+        alert('✅ Commande validée !\n\nVous allez recevoir un email de confirmation à ' + document.getElementById('email').value);
+        closeCheckout();
+        btn.disabled = false;
+        btn.innerHTML = '<span>Valider la commande</span><span id="btn-total">' + currentProduct.price + ' €</span>';
+      }, 2000);
+    }
+
+    // Formater carte
+    document.addEventListener('DOMContentLoaded', () => {
+      const cardInput = document.getElementById('card-number');
+      if (cardInput) {
+        cardInput.addEventListener('input', (e) => {
+          let value = e.target.value.replace(/\s/g, '');
+          let formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+          e.target.value = formatted;
+        });
+      }
+
+      const radios = document.querySelectorAll('.payment-method input[type="radio"]');
+      radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+          radio.closest('.payment-method').classList.add('active');
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
