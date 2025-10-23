@@ -70,12 +70,13 @@
       color: inherit
     }
 
-    /* Nav responsive */
     nav {
       position: sticky;
       top: 0;
       z-index: 999;
-      background: var(--glass);
+      background: linear-gradient(var(--glass), var(--glass)), url('images/banniere.png');
+      background-size: 100% 100%;
+      background-position: center;
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--stroke);
     }
@@ -98,14 +99,6 @@
       gap: 8px
     }
 
-    .mark {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--c1), var(--c2));
-      box-shadow: var(--shadow)
-    }
-
     nav ul {
       display: flex;
       gap: 20px;
@@ -123,7 +116,6 @@
       color: var(--ink)
     }
 
-    /* Hero avec carrousel */
     .hero {
       position: relative;
       min-height: 100vh;
@@ -135,7 +127,6 @@
       overflow: hidden;
     }
 
-    /* Carrousel d'images en fond */
     .hero-carousel {
       position: absolute;
       inset: 0;
@@ -162,7 +153,6 @@
       background: linear-gradient(135deg, rgba(139, 205, 242, .85), rgba(211, 211, 211, .85));
     }
 
-    /* Contenu hero par-dessus */
     .hero-content {
       position: relative;
       z-index: 2;
@@ -234,7 +224,6 @@
       color: var(--white);
     }
 
-    /* Indicateurs carrousel */
     .carousel-dots {
       position: absolute;
       bottom: 40px;
@@ -260,7 +249,6 @@
       transform: scale(1.3);
     }
 
-    /* Bandeau marquee */
     .marquee {
       background: var(--ink);
       color: var(--white);
@@ -292,7 +280,6 @@
       }
     }
 
-    /* Sections produits */
     section {
       padding: 80px 20px;
     }
@@ -404,7 +391,6 @@
       font-family: Outfit, sans-serif;
     }
 
-    /* Footer */
     footer {
       background: var(--ink);
       color: var(--white);
@@ -444,7 +430,6 @@
       margin-bottom: 12px;
     }
 
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -633,7 +618,6 @@
       box-shadow: 0 12px 32px rgba(139, 205, 242, .4);
     }
 
-    /* Responsive */
     @media (min-width:768px) {
       nav ul {
         gap: 28px
@@ -1638,7 +1622,6 @@
   </style>
 
   <script>
-    // CARROUSEL HERO
     let currentSlide = 0;
     const slides = document.querySelectorAll('.hero-slide');
     const dots = document.querySelectorAll('.carousel-dot');
@@ -1661,10 +1644,8 @@
       showSlide(n);
     }
 
-    // Auto-défilement toutes les 5 secondes
     setInterval(nextSlide, 5000);
 
-    // MODALS
     function openModal(model) {
       document.getElementById('modal-' + model).classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -1684,7 +1665,6 @@
       }
     });
 
-    // CHECKOUT
     let currentProduct = {
       name: '',
       price: 0,
@@ -1771,7 +1751,6 @@
       }, 2000);
     }
 
-    // Formater carte
     document.addEventListener('DOMContentLoaded', () => {
       const cardInput = document.getElementById('card-number');
       if (cardInput) {
