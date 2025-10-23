@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Lunettes de sport — SEMAINE INNOVATION</title>
   <meta name="description"
-    content="Lunettes de sport connectées: HUD D+, GPS, parcours type Strava, cardio, hydratation, météo, SOS. Performance & sécurité.">
+    content="Lunettes de sport connectées: HUD D+, GPS, parcours type TRAKR APP, cardio, hydratation, météo, SOS. Performance & sécurité.">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="/images/logo_trakr.png" rel="stylesheet">
   <style>
@@ -329,12 +329,11 @@
       margin-bottom: 16px;
     }
 
-    /* Grille produits */
     .products-grid {
       max-width: 1400px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
       padding: 0 20px;
     }
@@ -716,7 +715,7 @@
       <div class="hero-slide active"
         style="background-image:url('https://images.unsplash.com/photo-1549576490-b0b4831ef60a?q=80&w=2400')"></div>
       <div class="hero-slide"
-        style="background-image:url('https://images.unsplash.com/photo-1452573992436-6d508f200b30?q=80&w=2400')"></div>
+        style="background-image:url('https://images.unsplash.com/photo-1452572992436-6d508f200b30?q=80&w=2400')"></div>
       <div class="hero-slide"
         style="background-image:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2400')"></div>
       <div class="hero-slide"
@@ -724,9 +723,10 @@
     </div>
 
     <div class="hero-content">
-      <span class="hero-badge">🚀 SEMAINE INNOVATION</span>
-      <h1>Voyez plus loin</h1>
-      <p>Lunettes de sport connectées : HUD D+ intégré, GPS live, parcours type Strava, cardio, hydratation, météo, SOS.
+      <span class="hero-badge">SEMAINE INNOVATION</span>
+      <h1>Gardez les yeux devant, la technologie vous suit</h1>
+      <p>Lunettes de sport connectées : HUD D+ intégré, GPS live, parcours type TRAKR APP, cardio, hydratation, météo,
+        SOS.
         Performance, nature et sécurité en un regard.</p>
       <div class="hero-cta">
         <a href="#gamme" class="btn">Découvrir la gamme</a>
@@ -745,13 +745,13 @@
   <div class="marquee">
     <div class="marquee-content">
       <span>✓ HUD Display+ intégré</span>
-      <span>✓ GPS & Parcours Strava</span>
+      <span>✓ GPS & Parcours TRAKR APP</span>
       <span>✓ Cardio optique</span>
       <span>✓ Météo live</span>
       <span>✓ SOS intégré</span>
       <span>✓ Détection obstacles IA</span>
       <span>✓ HUD Display+ intégré</span>
-      <span>✓ GPS & Parcours Strava</span>
+      <span>✓ GPS & Parcours TRAKR APP</span>
       <span>✓ Cardio optique</span>
       <span>✓ Météo live</span>
     </div>
@@ -760,12 +760,12 @@
   <section id="concept">
     <div class="section-inner">
       <div class="section-img">
-        <img src="https://images.unsplash.com/photo-1452573992436-6d508f200b30?q=80&w=1600" alt="Trail nature">
+        <img src="https://images.unsplash.com/photo-1452572992436-6d508f200b30?q=80&w=1600" alt="Trail nature">
       </div>
       <div class="section-text">
         <h2>Un regard suffit</h2>
         <p>Conçues pour les sportifs exigeants, nos lunettes intègrent un affichage tête haute (HUD) discret : vitesse,
-          distance, dénivelé, cardio, météo, hydratation. Guidage GPS type Strava pour suivre vos parcours.</p>
+          distance, dénivelé, cardio, météo, hydratation. Guidage GPS type TRAKR APP pour suivre vos parcours.</p>
         <p>Monture ultra-légère en carbone (28g), résistante (IP68), avec capteurs cardio optique et détection
           d'obstacles par IA. Finition mate, verres polarisés interchangeables.</p>
         <a href="#gamme" class="btn">Explorer la gamme</a>
@@ -790,7 +790,7 @@
         <div class="product-body">
           <h3>STANDARD</h3>
           <p>Le modèle essentiel pour toutes vos activités. GPS, cardio optique, météo et guidage simple.</p>
-          <div class="product-price">399 €</div>
+          <div class="product-price">299 €</div>
           <button class="btn" style="width:100%" onclick="event.stopPropagation();openModal('standard')">Voir la fiche
             technique</button>
         </div>
@@ -804,10 +804,26 @@
         <div class="product-body">
           <h3>PREMIUM</h3>
           <p>Toutes les fonctionnalités : HUD D+, détection IA, monture carbone. Pour la performance pure.</p>
-          <div class="product-price">599 €</div>
+          <div class="product-price">399 €</div>
           <button class="btn" style="width:100%" onclick="event.stopPropagation();openModal('premium')">Voir la fiche
             technique</button>
         </div>
+
+      </div>
+
+      <div class="product-card" onclick="openModal('collab')">
+        <div class="product-img">
+          <img src="images/lunette_partenariat.png" alt="COLLAB">
+          <span class="product-badge" style="background:var(--c1);color:var(--white);border:none">Edition limitée</span>
+        </div>
+        <div class="product-body">
+          <h3>PREMIUM (Collaboration avec Oakley)</h3>
+          <p>Toutes les fonctionnalités : HUD D+, détection IA, monture carbone. Pour la performance pure.</p>
+          <div class="product-price">399 €</div>
+          <button class="btn" style="width:100%" onclick="event.stopPropagation();openModal('collab')">Voir la fiche
+            technique</button>
+        </div>
+
       </div>
 
     </div>
@@ -922,11 +938,11 @@
       </div>
       <div class="modal-footer">
         <div class="modal-price">
-          <span class="price-main">399 €</span>
+          <span class="price-main">299 €</span>
           <span style="font-size:13px;color:var(--muted)">Livraison gratuite • Retour 30j</span>
         </div>
         <button class="modal-cta"
-          onclick="openCheckout('standard', 'STANDARD — L\'essentiel', 399, 'images/standard.jpg')">
+          onclick="openCheckout('standard', 'STANDARD — L\'essentiel', 299, 'images/lunette_standard.png')">
           Acheter maintenant
         </button>
       </div>
@@ -976,7 +992,7 @@
             <h4 style="margin:30px 0 16px;font-size:18px">Fonctionnalités incluses</h4>
             <ul class="features-list">
               <li>HUD D+ temps réel</li>
-              <li>Navigation parcours (Strava, Komoot)</li>
+              <li>Navigation parcours (TRAKR APP, Komoot)</li>
               <li>Capteur cardio optique avancé</li>
               <li>Détection obstacles IA</li>
               <li>Météo live + alertes orage</li>
@@ -989,15 +1005,84 @@
       </div>
       <div class="modal-footer">
         <div class="modal-price">
-          <span class="price-main">599 €</span>
+          <span class="price-main">399 €</span>
           <span style="font-size:13px;color:var(--muted)">Livraison express • Gravure offerte</span>
         </div>
-        <button class="modal-cta" onclick="openCheckout('premium', 'PREMIUM — Performance', 599, 'images/premium.jpg')">
+        <button class="modal-cta"
+          onclick="openCheckout('premium', 'PREMIUM — Performance', 399, 'images/lunette_premium.png')">
           Acheter maintenant
         </button>
       </div>
     </div>
   </div>
+
+  <div id="modal-collab" class="modal" onclick="if(event.target===this) closeModal('collab')">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Oakley x TRAKR</h2>
+        <button class="modal-close" onclick="closeModal('collab')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div class="modal-img">
+            <img src="images/lunette_partenariat.png" alt="COLLAB">
+          </div>
+          <div>
+            <h3>Spécifications techniques</h3>
+            <div class="specs-grid">
+              <div class="spec-item">
+                <span class="spec-label">Poids</span>
+                <span class="spec-value">28g (Carbone)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Autonomie</span>
+                <span class="spec-value">14h (HUD+)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Résistance</span>
+                <span class="spec-value">IP68</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Garantie</span>
+                <span class="spec-value">24 mois</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Verres inclus</span>
+                <span class="spec-value">3 paires (Photochromique)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Recharge</span>
+                <span class="spec-value">USB-C rapide</span>
+              </div>
+            </div>
+
+            <h4 style="margin:30px 0 16px;font-size:18px">Fonctionnalités incluses</h4>
+            <ul class="features-list">
+              <li>HUD D+ temps réel</li>
+              <li>Navigation parcours (TRAKR APP, Komoot)</li>
+              <li>Capteur cardio optique avancé</li>
+              <li>Détection obstacles IA</li>
+              <li>Météo live + alertes orage</li>
+              <li>Monture carbone ultra-légère</li>
+              <li>Coaching vocal intégré</li>
+              <li>Analyse biomécanique</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-price">
+          <span class="price-main">399 €</span>
+          <span style="font-size:13px;color:var(--muted)">Livraison express • Gravure offerte</span>
+        </div>
+        <button class="modal-cta"
+          onclick="openCheckout('collab', 'PREMIUM — Performance', 399, 'images/lunette_collab')">
+          Acheter maintenant
+        </button>
+      </div>
+    </div>
+  </div>
+
 
   <div id="checkout-page" class="checkout-page">
     <div class="checkout-container">
