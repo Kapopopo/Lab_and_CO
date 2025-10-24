@@ -659,6 +659,79 @@
       width: 150px;
       height: 55px;
     }
+
+    /* --- Responsive navbar (burger menu) --- */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 28px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.menu-toggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: 0.3s;
+}
+
+@media (max-width: 780px) {
+  .nav {
+    position: relative;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .navlinks {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    background: rgba(11, 16, 32, 0.95);
+    width: 200px;
+    padding: 12px 18px;
+    border-radius: 0 0 12px 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s ease;
+  }
+
+  .navlinks.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .navlinks a {
+    width: 100%;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Animation burger -> croix */
+  .menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+  }
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+  }
+}
+
   </style>
 </head>
 
@@ -671,8 +744,14 @@
     <nav class="nav">
       <a class="brand" href="index.html">
         <img src="images/trakr logo blanc.png" alt="test" class="logo" />
-
       </a>
+
+      <div class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
       <div class="navlinks">
         <a class="chip" href="#map">Carte</a>
         <a class="chip" href="#hud">HUD</a>
@@ -682,6 +761,7 @@
       </div>
     </nav>
   </header>
+
 
   <section class="hero">
     <div class="panel hero-left">
@@ -972,6 +1052,14 @@
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => { e.preventDefault(); document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' }); })
     })
+    // --- Navbar burger menu ---
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.querySelector(".navlinks");
+    menuToggle.addEventListener("click", () => {
+      menuToggle.classList.toggle("active");
+      navLinks.classList.toggle("show");
+    });
+
   </script>
 </body>
 
